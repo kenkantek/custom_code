@@ -1,0 +1,282 @@
+<{include file="header.html"}>
+
+<body>
+
+<div class="blueline">
+
+</div>
+
+<div id="header">
+
+	<div class="wrap">
+		<{include file="block_top.html"}>
+	</div>
+
+</div>
+
+<div class="wrap">
+
+	<div id="content_pages">
+
+		<div id="content_left">
+
+			<div id="submenu" style="margin:0">
+
+			<img src="<{$smarty.const.WEBSITE_URL}>images/mainmenu_content.png" alt="Main Menu" />
+			<ul>
+				<li><a href="#" class="list">&nbsp;&nbsp;List</a></li>
+				<{if $isAdmin}>
+				<li><a href="#" class="add">&nbsp;&nbsp;Add New</a></li>
+				<{/if}>
+             <br /><br />
+             <div id="divSearch">
+                <form id="frmSearch">
+                <table width="100%" border="0" cellspacing="1" cellpadding="1">
+                 <tr>
+                   <td colspan="2"><strong>Search</strong></td>
+                 </tr>
+                 <tr>
+                   <td>Username</td>
+                   <td>
+                       <input name="usernameSearch" id="usernameSearch" />
+                   </td>
+                 </tr>
+                 <tr>
+                   <td colspan="2" align="right">
+                       <input type="reset" name="clear" id="clear" value="Clear" />
+                       <input type="submit" name="button" id="button" value="Search" />
+                   </td>
+                 </tr>
+                </table>
+                </form>
+             </div>
+			</ul>
+
+			</div>
+
+
+		</div>
+
+		<div id="content_area">
+
+			<h3><{$navTitle}> -> <span id="navTitle">List</span></h3>
+			
+			<!-- for display message -->
+			<div id="message">
+				<div id="messageDetail"></div>
+			</div>
+
+			<br/>
+			
+			<div id="content_wrapper"></div>
+
+		</div>
+
+		<div class="clr"></div>
+
+	</div>
+
+</div>
+<{include file="footer.html"}>
+<{literal}>
+<script src="js/jquery.form.js" type="text/javascript"></script>
+<script language="javascript">
+	
+	var path = '<{/literal}><{$processPath}><{literal}>';
+
+	var sortDirection	= 'ASC';
+	var sortColumn		= 'username';
+
+	var currentPage = 1;
+
+	function list(){
+
+			changeNavTitle('List');
+			$('#divSearch').show();
+
+			var form = $('#frmSearch').serializeArray();
+			form[form.length] = {name : 'current_page' , value : currentPage};
+			form[form.length] = {name : 'sortDirection' , value : sortDirection};
+			form[form.length] = {name : 'sortColumn' , value : sortColumn};
+
+			callAjax('POST',
+					'content_wrapper',
+					path + 'get_list.php',
+					form,
+					'listOk',
+					'listError');
+	}
+	function listOk() {
+
+		<{/literal}><{if $isAdmin}><{literal}>
+		$("a.delete").click(function(){
+			var result = window.confirm("Delete this record ?");
+			if(result==false){
+				return;
+			}
+			callAjax('POST',
+					'content_wrapper',
+					 path + 'do_delete.php',
+					'id=' + $(this).attr('rel'),
+					'doOk',
+					'listError',
+					false);
+
+			return false;
+		})
+		<{/literal}><{/if}><{literal}>
+		
+		$("a.paging").click(function(){
+			currentPage = $(this).attr('rel');
+			list();
+		})
+
+		$("a.edit").click(function(){
+			changeNavTitle('Edit');
+			$('#divSearch').hide();
+
+			callAjax('GET',
+				'content_wrapper',
+				 path + 'get_form_edit.php',
+				'id=' + $(this).attr('rel'),
+				'getFormEditCallBack',
+				'listError');
+
+			return false;
+		})
+
+		$("a.sort").click(function(){
+			currentPage = 1;
+			if(sortDirection == 'ASC')
+				sortDirection = 'DESC';
+			else
+				sortDirection = 'ASC';
+			sortColumn = $(this).attr('rel');
+
+			list();
+		})
+
+	}
+
+	function doOk()
+	{
+		list();
+	}
+
+	function listError(){
+		displayError('Error when getting data. Press Ctrl + F5 to reload');
+	}
+
+	$(document).ready(function(){
+		//call get list
+		list();
+
+		//handle form seach
+		$('#frmSearch').submit(function(){
+			list();
+			return false;
+		})
+
+		//Page List
+		$('a.list').click(function(){
+			list();
+			return false;
+		});
+
+		<{/literal}><{if $isAdmin}><{literal}>
+		//Add new
+		$('a.add').click(function(){
+			changeNavTitle('Add');
+			$('#divSearch').hide();
+
+			callAjax('GET',
+				'content_wrapper',
+				 path + 'get_form_add.php',
+				'',
+				'getFormAddCallBack',
+				'listError');
+
+			return false;
+		});
+		<{/literal}><{/if}><{literal}>
+	})
+
+	function getFormAddCallBack()
+	{
+
+		//click add record button
+		
+		$('#addRecord').click(function(){
+
+			submitForm();
+
+			return false;
+		})
+    }
+
+	function submitForm(){
+		$('#frmAdd').ajaxSubmit({
+			beforeSubmit:  beforeSubmit,
+			success:       ajaxCallback,
+			url:         path + 'do_add.php',
+			dataType:   'json'
+		});
+	}
+
+	function getFormEditCallBack()
+	{
+
+		//click add record button
+
+		$('#addRecord').click(function(){
+
+			submitFormEdit();
+
+			return false;
+		})
+    }
+
+	function submitFormEdit(){
+		$('#frmAdd').ajaxSubmit({
+			beforeSubmit:  beforeSubmit,
+			success:       ajaxCallback,
+			url:         path + 'do_update.php',
+			dataType:   'json'
+		});
+	}
+	
+	function ajaxCallback(data)
+	{
+		if(!data.result)
+		{
+			var object = data.data;
+			var errors = '';
+			for (key in object) {
+			  errors = errors + object[key] + "<br />";
+			}
+			displayMessageBox(errors);
+			$('#content_wrapper').show();
+			return false;
+		}
+		else
+		{
+			displayMessageBox(data.data);
+			$('#content_wrapper').show();
+			list();
+		}
+
+	}
+
+	function beforeSubmit(formData, jqForm, options)
+	{
+		$('#content_wrapper').hide();
+		$('#message').show();
+		$('#messageDetail').html('<br/><br/><p align="center"><img src="' + ajax_loader_image +'" /></p><br/><br/>');
+		return true;
+	}
+
+
+</script>
+<{/literal}>
+</body>
+</html>

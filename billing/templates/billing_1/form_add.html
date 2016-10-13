@@ -1,0 +1,60 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<table width="100%">
+		<tr>
+			<td>Contract Number </td>
+			<td><input name="number" id="number" /></td>
+		</tr>
+		<tr>
+			<td>Contract Name</td>
+			<td><input name="name" id="name" /></td>
+		</tr>
+		<tr>
+			<td>Start Date</td>
+			<td><input name="start_date" id="start_date" /></td>
+		</tr>
+		<tr>
+			<td>Assigned User</td>
+			<td>
+				<{$userCombo}>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<table width="100%">
+					<tr>
+						<td align="center">Facilities Available:</td>
+						<td></td>
+						<td align="center">Facilities Assigned</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<select id="source" name="source[]" multiple="true" class="listInForm">
+								<{if $avaiFacilities}>
+									<{foreach from=$avaiFacilities item=row}>
+										<option value="<{$row.id}>"><{$row.name}></option>
+									<{/foreach}>
+								<{/if}>
+							</select>
+						</td>
+						<td align="center">
+							<input type="button" id="btAdd" value=">>" /><br/><br/>
+							<input type="button" id="btRemove" value="<<" />
+						</td>
+						<td align="center">
+							<select id="desc" name="desc[]" multiple="true" class="listInForm">
+							</select>
+						</td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="addRecord" value="Submit">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+</form>
+		

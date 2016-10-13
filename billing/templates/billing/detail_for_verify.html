@@ -1,0 +1,113 @@
+<{include file="header.html"}>
+<body>
+	<div class="wrap" style="padding-bottom: 50px;">
+
+		<h1><{$headTitle}></h1>
+
+		<{$content}>
+		<br><br>
+
+		<{if $viewForOnGoingBill}>
+			<b><font color="#FF0000">preliminary information -  Cannot verify until the 1st of next month.
+			</font></b>
+			<br/><br/>
+			<table>
+				<tr>
+					<td>
+						<form action="" method="POST" id="formVerify3">
+							<input type="hidden" value="1" name="download" />
+							<input type="hidden" value="pdf" name="file_format" />
+							<input type="submit" value="Download this Bill as PDF" name="submit" />
+						</form>
+					</td>
+					<td>
+						<form action="" method="POST" id="formVerify4">
+							<input type="hidden" value="1" name="download" />
+							<input type="hidden" value="doc" name="file_format" />
+							<input type="submit" value="Download this Bill as DOC" name="submit" />
+						</form>
+					</td>
+					<td>
+						<form action="" method="POST" id="formVerify5">
+							<input type="hidden" value="1" name="download" />
+							<input type="hidden" value="xls" name="file_format" />
+							<input type="submit" value="Download this Bill as XLS" name="submit" />
+						</form>
+					</td>
+					<td><input type="button" value="Close" id="doClose" /></td>
+				</tr>
+			</table>
+		<{else}>
+				<{if $allowDoVerify}>
+					Email : <{$contract.email}> <{$contract.email2}> <{$contract.email3}><br/>
+					File format : <{$fileFormat}>
+					<br/><br/>
+					<table>
+						<tr>
+							<td>
+								<form action="" method="POST" id="formVerify1">
+									<input type="hidden" value="1" name="doVerify" />
+									<input type="submit" value="Verify" name="submit" />
+								</form>
+							</td>
+							<td>
+								<form action="" method="POST" id="formVerify2">
+									<input type="hidden" value="1" name="doVerify" />
+									<input type="hidden" value="1" name="sendEmail" />
+									<input type="submit" value="Verify and Email" name="submit" />
+								</form>
+							</td>
+							<td>
+								<form action="" method="POST" id="formVerify21">
+									<input type="hidden" value="1" name="doVerify" />
+									<input type="hidden" value="1" name="download" />
+									<input type="submit" value="Verify and Download" name="submit" />
+									<input type="hidden" value="pdf" name="file_format" />
+								</form>
+							</td>
+							<td>
+								<form action="" method="POST" id="formVerify3">
+									<input type="hidden" value="1" name="download" />
+									<input type="hidden" value="pdf" name="file_format" />
+									<input type="submit" value="Download this Bill as PDF" name="submit" />
+								</form>
+							</td>
+							<td>
+								<form action="" method="POST" id="formVerify4">
+									<input type="hidden" value="1" name="download" />
+									<input type="hidden" value="doc" name="file_format" />
+									<input type="submit" value="Download this Bill as DOC" name="submit" />
+								</form>
+							</td>
+							<td>
+								<form action="" method="POST" id="formVerify5">
+									<input type="hidden" value="1" name="download" />
+									<input type="hidden" value="xls" name="file_format" />
+									<input type="submit" value="Download this Bill as XLS" name="submit" />
+								</form>
+							</td>
+							<td>
+								<input type="button" value="Close" id="doClose" />
+							</td>
+						</tr>
+					</table>
+				<{else}>
+					<input type="button" value="Close" id="doClose" />
+				<{/if}>
+		<{/if}>
+
+	</div>
+
+<{include file="footer.html"}>
+</body>
+</html>
+<{literal}>
+<script language="javascript">
+
+	$(document).ready(function(){
+		$('#doClose').click(function(){
+			window.close();
+		});
+	})
+</script>
+<{/literal}>

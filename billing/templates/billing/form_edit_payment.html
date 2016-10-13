@@ -1,0 +1,27 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<h3>Edit Payment</h3>
+	<table width="100%">
+
+		<tr>
+			<td>Date</td>
+			<td><input name="date" id="date" readonly="readonly" value="<{$payment.date_formmatted}>" /></td>
+		</tr>
+		<tr>
+			<td>Amount</td>
+			<td><input name="amount" id="amount" value="<{$payment.amount}>" /></td>
+		</tr>
+		<tr>
+			<td>Check Number</td>
+			<td><input name="check" id="check" class="textboxInForm" value="<{$payment.check}>" /></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="updateRecord" value="Save">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" id="payment_id" name="payment_id" value="<{$payment_id}>" />
+	<input type="hidden" id="billing_id" name="billing_id" value="<{$billing_id}>" />
+</form>

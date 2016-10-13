@@ -1,0 +1,23 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<h3>Edit Notes</h3>
+	<table width="100%">
+
+		<tr>
+			<td>Date</td>
+			<td><input name="date" id="date" readonly="readonly" value="<{$record.date_formmatted}>" /></td>
+		</tr>
+		<tr>
+			<td>Notes</td>
+			<td><textarea name="notes" id="notes"><{$record.notes}></textarea></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="updateRecord" value="Save">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" id="notes_id" name="notes_id" value="<{$notes_id}>" />
+	<input type="hidden" id="billing_id" name="billing_id" value="<{$billing_id}>" />
+</form>

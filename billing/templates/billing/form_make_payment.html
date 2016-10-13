@@ -1,0 +1,53 @@
+<div id="contractInfo">
+<h3>Contract & Bill Info</h3>
+<table width="60%">
+		<tr>
+			<td>Contract Number </td>
+			<td><{$contract.number}></td>
+		</tr>
+		<tr>
+			<td>Contract Name</td>
+			<td><{$contract.name}></td>
+		</tr>
+		<tr>
+			<td>Assigned User</td>
+			<td><{$contract.username}></td>
+		</tr>
+		<tr>
+			<td>Bill Verified By</td>
+			<td><{$bill.username}></td>
+		</tr>
+		<tr>
+			<td>Bill Verified On</td>
+			<td><{$bill.date_verify}></td>
+		</tr>
+		<tr>
+			<td>Bill Invoice ID</td>
+			<td><{$bill.invoice_id}></td>
+		</tr>
+		<tr>
+			<td>Bill Amount</td>
+			<td>$<{$bill.amount}></td>
+		</tr>
+		<tr>
+			<td>Month</td>
+			<td><{$bill.month}></td>
+		</tr>
+		<tr>
+			<td>Year</td>
+			<td><{$bill.year}></td>
+		</tr>
+</table>
+<input type="hidden" value="<{$bill.id}>" id="billing_id_view" />
+</div>
+
+<div id="paymentInfo">
+
+</div>
+<br/><br/>
+<h3>Payment List</h3>
+<div id="divListPayment">
+	List payment here
+</div>
+		
+

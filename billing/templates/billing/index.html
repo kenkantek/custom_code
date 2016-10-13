@@ -1,0 +1,726 @@
+<{include file="header.html"}>
+
+<body>
+
+<div class="blueline">
+
+</div>
+
+<div id="header">
+
+	<div class="wrap">
+		<{include file="block_top.html"}>
+	</div>
+
+</div>
+
+<div class="wrap">
+
+	<div id="content_pages">
+
+		<div id="content_left">
+
+			<div id="submenu" style="margin:0">
+
+			<img src="<{$smarty.const.WEBSITE_URL}>images/mainmenu_content.png" alt="Main Menu" />
+			<ul>
+				<li><a href="#" class="list">&nbsp;&nbsp;List</a></li>
+             <br /><br />
+             <div id="divSearch">
+                <form id="frmSearch">
+                <table width="100%" border="0" cellspacing="1" cellpadding="1">
+                 <tr>
+                   <td colspan="2"><strong>Search</strong></td>
+                 </tr>
+				 <tr>
+                   <td>Invoice NO</td>
+                   <td>
+                       <input name="invoiceIdSearch" id="invoiceIdSearch" />
+                   </td>
+                 </tr>
+                 <tr>
+                   <td>Contract Number</td>
+                   <td>
+                       <input name="numberSearch" id="numberSearch" />
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Name</td>
+                   <td>
+                       <input name="nameSearch" id="nameSearch" />
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Email</td>
+                   <td>
+                       <input name="emailSearch" id="emailSearch" />
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Contract Start Date</td>
+                   <td>
+                       <input name="startDateSearch" id="startDateSearch" />
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Year</td>
+                   <td>
+                       <{$currentYear}>
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Assigned User</td>
+                   <td>
+                       <{$userCombo}>
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Status</td>
+                   <td>
+                       <select id="statusSearch" name="statusSearch" class="comboSmall">
+						   <option value="all" selected="selected">All</option>
+						   <option value="unverified">Unverified</option>
+						   <option value="verified">Verified</option>
+					   </select>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td colspan="2" align="right">
+                       <input type="reset" name="clear" id="clear" value="Clear" />
+                       <input type="submit" name="button" id="button" value="Search" />
+                   </td>
+                 </tr>
+                </table>
+                </form>
+             </div>
+			</ul>
+
+			</div>
+
+
+		</div>
+
+		<div id="content_area">
+
+			<h3><{$navTitle}> -> <span id="navTitle">List</span></h3>
+			
+			<!-- for display message -->
+			<div id="message">
+				<div id="messageDetail"></div>
+			</div>
+
+			<br/>
+			
+			<div id="content_wrapper"></div>
+
+		</div>
+
+		<div class="clr"></div>
+
+	</div>
+
+</div>
+<{include file="footer.html"}>
+<{literal}>
+<script src="js/jquery.form.js" type="text/javascript"></script>
+<script language="javascript">
+	
+	var path = '<{/literal}><{$processPath}><{literal}>';
+
+	var sortDirection	= 'ASC';
+	var sortColumn		= 'number';
+	var currentPage = 1;
+	
+	var popupWindow = null;
+
+	$(document).ready(function(){
+		//call get list
+		list();
+
+		//handle form seach
+		$('#frmSearch').submit(function(){
+			list();
+			return false;
+		})
+
+		//Page List
+		$('a.list').click(function(){
+			list();
+			return false;
+		});
+
+		<{/literal}><{if $isAdmin}><{literal}>
+		//Add new
+		$('a.add').click(function(){
+			changeNavTitle('Add');
+			$('#divSearch').hide();
+
+			callAjax('GET',
+				'content_wrapper',
+				 path + 'get_form_add.php',
+				'',
+				'getFormAddCallBack',
+				'listError');
+
+			return false;
+		});
+		<{/literal}><{/if}><{literal}>
+
+		$('#startDateSearch').datepicker({autoSize: true,
+                            changeMonth: true,
+                            changeYear: true,
+                            closeText: 'Close',
+                            currentText: 'Now',
+                            dateFormat: 'mm/dd/yy',
+                            gotoCurrent: true,
+                            showButtonPanel: true,
+                            showWeek: true,
+                            weekHeader: 'Week'
+		});
+
+
+	})
+	
+	function list(){
+
+			changeNavTitle('List');
+			$('#divSearch').show();
+
+			var form = $('#frmSearch').serializeArray();
+			form[form.length] = {name : 'current_page' , value : currentPage};
+			form[form.length] = {name : 'sortDirection' , value : sortDirection};
+			form[form.length] = {name : 'sortColumn' , value : sortColumn};
+
+			callAjax('POST',
+					'content_wrapper',
+					path + 'get_list.php',
+					form,
+					'listOk',
+					'listError');
+	}
+	function listOk() {
+//		<{/literal}><{if $isAdmin}><{literal}>
+//		$("a.delete").click(function(){
+//			var result = window.confirm("Delete this record ?");
+//			if(result==false){
+//				return;
+//			}
+//			callAjax('POST',
+//					'content_wrapper',
+//					 path + 'do_delete.php',
+//					'id=' + $(this).attr('rel'),
+//					'doOk',
+//					'listError',
+//					false);
+//
+//			return false;
+//		})
+//
+//		$("a.edit").click(function(){
+//			changeNavTitle('Edit');
+//			$('#divSearch').hide();
+//
+//			callAjax('GET',
+//				'content_wrapper',
+//				 path + 'get_form_edit.php',
+//				'id=' + $(this).attr('rel'),
+//				'getFormEditCallBack',
+//				'listError');
+//
+//			return false;
+//		})
+//		<{/literal}><{/if}><{literal}>
+
+		$("a.paging").click(function(){
+			currentPage = $(this).attr('rel');
+			list();
+		})
+
+		$("a.sort").click(function(){
+			currentPage = 1;
+			if(sortDirection == 'ASC')
+				sortDirection = 'DESC';
+			else
+				sortDirection = 'ASC';
+			sortColumn = $(this).attr('rel');
+
+			list();
+		})
+	
+		//click to popup verify
+		$('a.billViewVerify').click(function(){
+			MyPopUpWin('get_bill_for_verify.php?p=' + $(this).attr('rel'));
+			return false;
+		});
+		
+		//click to popup detail
+		$('a.billViewDetail').click(function(){
+			MyPopUpWin('get_bill_for_view.php?p=' + $(this).attr('rel'));
+			return false;
+		});
+
+		//click to popup payment
+		$('a.makePayment').click(function(){
+			
+			changeNavTitle('Manage Payment');
+			$('#divSearch').hide();
+			
+			callAjax('GET',
+				'content_wrapper',
+				 path + 'get_form_make_payment.php',
+				'p=' + $(this).attr('rel'),
+				'getMakePaymentCallBack',
+				'listPaymentError');
+			return false;
+		});
+
+		//click to note
+		$('a.makeNote').click(function(){
+
+			changeNavTitle('Manage Notes');
+			$('#divSearch').hide();
+
+			callAjax('GET',
+				'content_wrapper',
+				 path + 'get_form_make_note.php',
+				'p=' + $(this).attr('rel'),
+				'getMakeNoteCallBack',
+				'listNoteError');
+			return false;
+		});
+
+	}
+
+	function doOk()
+	{
+		list();
+	}
+
+	function listError(){
+		displayError('Error when getting data. Press Ctrl + F5 to reload');
+	}
+
+	function getMakePaymentCallBack()
+	{
+		//call get form add
+		getFormAddPayment();
+		
+
+		//call list payment
+		listPayment();
+	}
+
+	function getFormAddCallBack()
+	{
+
+		$('#date').datepicker({autoSize: true,
+                            changeMonth: true,
+                            changeYear: true,
+                            closeText: 'Close',
+                            currentText: 'Now',
+                            dateFormat: 'mm/dd/yy',
+                            gotoCurrent: true,
+                            showButtonPanel: true,
+                            showWeek: true,
+                            weekHeader: 'Week'
+		});
+
+		//click add record button
+		$('#addRecord').click(function(){
+			submitForm();
+			return false;
+		})
+    }
+
+	function submitForm(){
+		
+		if(!validateForm()) return false;
+
+		$('#frmAdd').ajaxSubmit({
+			beforeSubmit:  beforeSubmit,
+			success:       ajaxCallback,
+			url:         path + 'do_add_payment.php',
+			dataType:   'json'
+		});
+	}
+
+	function ajaxCallback(data)
+	{
+		if(!data.result)
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			return false;
+		}
+		else
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			//reset params
+			$('#date').val('');
+			$('#amount').val('');
+			$('#check').val('');
+			
+			listPayment();
+		}
+
+	}
+
+	function beforeSubmit(formData, jqForm, options)
+	{
+		$('#paymentInfo').hide();
+		$('#message').show();
+		$('#messageDetail').html('<br/><br/><p align="center"><img src="' + ajax_loader_image +'" /></p><br/><br/>');
+		return true;
+	}
+
+	function validateForm()
+	{
+		if($('#date').val() == '')
+		{
+			displayMessageBox('Please select Date');
+			$('#start_date').focus();
+			return false;
+		}
+		
+		if($('#amount').val() == '' || isNaN($('#amount').val()))
+		{
+			displayMessageBox('Please enter Amount');
+			$('#amount').focus();
+			return false;
+		}
+		
+		if($('#check').val() == '')
+		{
+			displayMessageBox('Please enter Check Number');
+			$('#check').focus();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	function listPayment()
+	{
+			billing_id = $('#billing_id_view').val();
+			callAjax('GET',
+					'divListPayment',
+					path + 'get_list_payment.php',
+					'billing_id=' + billing_id,
+					'listPaymentOk',
+					'listPaymentError');
+	}
+	function listPaymentOk()
+	{
+		$("a.deletePayment").click(function(){
+			var result = window.confirm("Delete this record ?");
+			if(result==false){
+				return;
+			}
+			callAjax('POST',
+					'divListPayment',
+					 path + 'do_delete_payment.php',
+					'p=' + $(this).attr('rel'),
+					'doOkPayment',
+					'listPaymentError',
+					false);
+
+			return false;
+		})
+		
+		$("a.editPayment").click(function(){
+			callAjax('GET',
+					'paymentInfo',
+					 path + 'get_form_edit_payment.php',
+					'p=' + $(this).attr('rel'),
+					'getFormEditCallBack',
+					'listPaymentError',
+					true);
+
+			return false;
+		})
+	}
+	function doOkPayment()
+	{
+		listPayment();
+	}
+	function listPaymentError()
+	{
+		displayError('Error when getting data of payment. Press Ctrl + F5 to reload');
+	}
+
+	function getFormEditCallBack()
+	{
+		$('#date').datepicker({autoSize: true,
+                            changeMonth: true,
+                            changeYear: true,
+                            closeText: 'Close',
+                            currentText: 'Now',
+                            dateFormat: 'mm/dd/yy',
+                            gotoCurrent: true,
+                            showButtonPanel: true,
+                            showWeek: true,
+                            weekHeader: 'Week'
+		});
+
+		//click update record button
+		$('#updateRecord').click(function(){
+			submitFormEdit();
+			return false;
+		})
+    }
+
+	function submitFormEdit(){
+
+		if(!validateForm()) return false;
+
+		$('#frmAdd').ajaxSubmit({
+			beforeSubmit:  beforeSubmit,
+			success:       ajaxCallbackEdit,
+			url:         path + 'do_update_payment.php',
+			dataType:   'json'
+		});
+	}
+
+	function ajaxCallbackEdit(data)
+	{
+		if(!data.result)
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			return false;
+		}
+		else
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			getFormAddPayment();
+			listPayment();
+		}
+
+	}
+
+	function getFormAddPayment()
+	{
+		billing_id = $('#billing_id_view').val();
+		callAjax('GET',
+					'paymentInfo',
+					 path + 'get_form_add_payment.php',
+					'billing_id=' + billing_id,
+					'getFormAddCallBack',
+					'listPaymentError',
+					true);
+
+	}
+
+	//note----------------------------
+	function getMakeNoteCallBack()
+	{
+		//call get form add
+		getFormAddNote();
+
+
+		//call list note
+		listNote();
+	}
+
+	function getFormAddNote()
+	{
+		billing_id = $('#billing_id_view').val();
+		callAjax('GET',
+					'paymentInfo',
+					 path + 'get_form_add_note.php',
+					'billing_id=' + billing_id,
+					'getFormAddNoteCallBack',
+					'listNoteError',
+					true);
+
+	}
+
+	function getFormAddNoteCallBack()
+	{
+
+		$('#date').datepicker({autoSize: true,
+                            changeMonth: true,
+                            changeYear: true,
+                            closeText: 'Close',
+                            currentText: 'Now',
+                            dateFormat: 'mm/dd/yy',
+                            gotoCurrent: true,
+                            showButtonPanel: true,
+                            showWeek: true,
+                            weekHeader: 'Week'
+		});
+
+		//click add record button
+		$('#addRecord').click(function(){
+			submitFormNote();
+			return false;
+		})
+    }
+
+	function submitFormNote(){
+
+		if(!validateFormNote()) return false;
+
+		$('#frmAdd').ajaxSubmit({
+			beforeSubmit:  beforeSubmitNote,
+			success:       ajaxCallbackNote,
+			url:         path + 'do_add_note.php',
+			dataType:   'json'
+		});
+	}
+
+	function ajaxCallbackNote(data)
+	{
+		if(!data.result)
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			return false;
+		}
+		else
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			//reset params
+			$('#date').val('');
+			$('#notes').val('');
+
+			listNote();
+		}
+
+	}
+
+	function beforeSubmitNote(formData, jqForm, options)
+	{
+		$('#paymentInfo').hide();
+		$('#message').show();
+		$('#messageDetail').html('<br/><br/><p align="center"><img src="' + ajax_loader_image +'" /></p><br/><br/>');
+		return true;
+	}
+
+	function validateFormNote()
+	{
+		if($('#date').val() == '')
+		{
+			displayMessageBox('Please select Date');
+			$('#start_date').focus();
+			return false;
+		}
+
+		if($('#notes').val() == '')
+		{
+			displayMessageBox('Please enter Notes');
+			$('#notes').focus();
+			return false;
+		}
+
+		return true;
+	}
+
+	function listNoteError()
+	{
+		displayError('Error when getting data of notes. Press Ctrl + F5 to reload');
+	}
+
+	function listNote()
+	{
+			billing_id = $('#billing_id_view').val();
+			callAjax('GET',
+					'divListPayment',
+					path + 'get_list_note.php',
+					'billing_id=' + billing_id,
+					'listNoteOk',
+					'listNoteError');
+	}
+	function listNoteOk()
+	{
+		$("a.deleteNote").click(function(){
+			var result = window.confirm("Delete this record ?");
+			if(result==false){
+				return;
+			}
+			callAjax('POST',
+					'divListPayment',
+					 path + 'do_delete_note.php',
+					'p=' + $(this).attr('rel'),
+					'doOkNote',
+					'listNoteError',
+					false);
+
+			return false;
+		})
+
+		$("a.editNote").click(function(){
+			callAjax('GET',
+					'paymentInfo',
+					 path + 'get_form_edit_note.php',
+					'p=' + $(this).attr('rel'),
+					'getFormEditNoteCallBack',
+					'listNoteError',
+					true);
+
+			return false;
+		})
+	}
+	function doOkNote()
+	{
+		listNote();
+	}
+
+	function getFormEditNoteCallBack()
+	{
+		$('#date').datepicker({autoSize: true,
+                            changeMonth: true,
+                            changeYear: true,
+                            closeText: 'Close',
+                            currentText: 'Now',
+                            dateFormat: 'mm/dd/yy',
+                            gotoCurrent: true,
+                            showButtonPanel: true,
+                            showWeek: true,
+                            weekHeader: 'Week'
+		});
+
+		//click update record button
+		$('#updateRecord').click(function(){
+			submitFormEditNote();
+			return false;
+		})
+    }
+
+	function submitFormEditNote(){
+
+		if(!validateFormNote()) return false;
+
+		$('#frmAdd').ajaxSubmit({
+			beforeSubmit:  beforeSubmit,
+			success:       ajaxCallbackEditNote,
+			url:         path + 'do_update_note.php',
+			dataType:   'json'
+		});
+	}
+
+	function ajaxCallbackEditNote(data)
+	{
+		if(!data.result)
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			return false;
+		}
+		else
+		{
+			displayMessageBox(data.data);
+			$('#paymentInfo').show();
+			getFormAddNote();
+			listNote();
+		}
+
+	}
+
+</script>
+<{/literal}>
+</body>
+</html>

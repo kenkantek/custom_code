@@ -1,0 +1,45 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<table>
+		<{if $isAdmin &&  $form->username != 'admin'}>
+		<tr>
+			<td>Username: </td>
+			<td><input readonly="readonly" type="text" name="username" value="<{$form->username}>" /></td>
+		</tr>
+		<{else}>
+			<td>Username: </td>
+			<td>
+				<{$form->username}>
+				<input type="hidden" name="username" value="<{$form->username}>" />
+			</td>
+		<{/if}>
+		<tr>
+			<td>Password: </td>
+			<td><input type="password" name="password" /></td>
+		</tr>
+		<tr>
+			<td>Retype password: </td>
+			<td><input type="password" name="repassword" /></td>
+		</tr>
+		<{if $isAdmin &&  $form->username != 'admin'}>
+		<tr>
+			<td>Type</td>
+			<td>
+				<select id="type" name="type">
+					<option value="0" <{if $form->type == 0}>selected="selected"<{/if}> >User</option>
+					<option value="2" <{if $form->type == 2}>selected="selected"<{/if}> >Staff</option>
+					<option value="3" <{if $form->type == 3}>selected="selected"<{/if}> >SuperAdmin</option>
+				</select>
+			</td>
+		</tr>
+		<{else}>
+			<input type="hidden" name="type" value="<{$form->type}>" />
+		<{/if}>
+		<tr>
+			<td colspan="2">
+				<input type="button" id="addRecord" value="Submit">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" name="id" value="<{$form->id}>">
+</form>

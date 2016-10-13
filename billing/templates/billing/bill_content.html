@@ -1,0 +1,152 @@
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td colspan="2" align="right">
+			<font size="+1">REMIT TO</font>
+			<br>
+			<br>
+			<font size="+1"><{$smarty.const.BILL_ADDRESS}></font>
+			<br/>
+		</td>
+	</tr>
+	<tr>
+		<td width="50%">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td>
+						<font size="+1"><{$contract.title}></font><br>
+						<font size="+1"><{$contract.address}></font><br>
+						<font size="+1">CONTRACT NO.: <{$contract.number}></font><br>
+						<font size="+1">ATTN : <{$contract.username}></font><br>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="50%">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td align="right">
+						<font size="+1"><{$contract.phone}></font><br>
+						<font size="+1">TAX - ID : <{$contract.tax}></font><br>
+						<font size="+1">INVOICE NO.: <{$invoiceID}></font><br>
+						<font size="+1"><{$month}> <{$year}></font>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<br><br>
+<u><b><font size="+1">EXAM FEES:</font></b></u>
+<br><br>
+<table width="100%" cellpadding="5" cellspacing="0" border="1">
+	<tr>
+		<td><b>Date Of Service</b></td>
+		<{foreach from=$procedureCategory key=category item=value}>
+		<td><b><{$category|truncate}></b></td>
+		<{/foreach}>
+		<td><b>Total # of XRAY</b></td>
+		<td><b>Total</b></td>
+	</tr>
+	<{foreach from=$examFeesDetail key=dateOfService item=value}>
+	<tr>
+		<td><{$dateOfService}></td>
+			<{assign var=rowCount value=0}>
+			<{foreach from=$value key=category item=countValue}>
+			<td><{$countValue}></td>
+			<{assign var=rowCount value=$rowCount+$countValue}>
+			<{/foreach}>
+		<td><{$rowCount}></td>
+		<td></td>
+	</tr>
+	<{/foreach}>
+	<tr>
+		<td><b>TOTAL</b></td>
+		<{assign var=rowCount value=0}>
+		<{foreach from=$examFeesTotal key=category item=countValue}>
+		<td><b><{$countValue}></b></td>
+		<{assign var=rowCount value=$rowCount+$countValue}>
+		<{/foreach}>
+		<td><b><{$rowCount}></b></td>
+		<td><b>$<{$examFees}></b></td>
+	</tr>
+</table>
+
+<br><br>
+<u><b><font size="+1">SET-UP/TRANSPORT FEES:</font></b></u>
+<br><br>
+<table width="100%" cellpadding="5" cellspacing="0" border="1">
+	<tr>
+		<td><b>DATE OF SERVICE</b></td>
+		<td><b>R CODE</b></td>
+		<td><b>AMOUNT OF CHARGE</b></td>
+		<td><b>TOTAL</b></td>
+	</tr>
+	<{foreach from=$transportFeesDetail item=row}>
+	<tr>
+		<td><{$row.DATE_OF_SERVICE}></td>
+		<td><{$row.RCODE}></td>
+		<td><{$row.AMOUNT_OF_CHARGE}></td>
+		<td><{$row.TOTAL}></td>
+	</tr>
+	<{/foreach}>
+	<tr>
+		<td><b>TOTAL</b></td>
+		<td><b></b></td>
+		<td><b></b></td>
+		<td><b>$<{$transportFees}></b></td>
+	</tr>
+</table>
+<br><br>
+<b><{$rowCount}> PERFORMED</b><br>
+<b><font color="#FF0000">BALANCE UPON RECEIPT $<{$totalFees}></font></b><br>
+<br><br>
+
+<{if $contractHasOrder}>
+<p align="center"><b>EXAM LOG</b></p>
+<table width="100%" cellpadding="5" cellspacing="0" border="1">
+	<tr>
+		<td><b>DATE OF SERVICE</b></td>
+		<td><b>PATIENT NAME</b></td>
+		<td><b>PATIENT ID</b></td>
+		<td><b>EXAM</b></td>
+		<td><b>L/R/B</b></td>
+		<td><b>CPT CODE</b></td>
+		<td><b>RATE</b></td>
+	</tr>
+	<{foreach from=$examLog item=log}>
+	<tr>
+		<td><{$log.DATE_OF_SERVICE}></td>
+		<td><{$log.PATIENT_NAME}></td>
+		<td><{$log.PATIENT_ID}></td>
+		<td><{$log.EXAM}></td>
+		<td><{$log.VALUE}></td>
+		<td><{$log.CBT_CODE}></td>
+		<td>$<{$log.RATE}></td>
+	</tr>
+	<{/foreach}>
+</table>
+
+<{else}>
+	<{$noOrderMessage}>
+<{/if}>
+
+<br><br>
+
+
+<{*
+<{if count($examLogNotHaveOrder) > 0 }>
+<p align="center"><b>FACILITES DON'T HAVE ORDER IN THIS MONTH</b></p>
+<table width="100%" cellpadding="5" cellspacing="0" border="1">
+	<tr>
+		<td><b>INDEX</b></td>
+		<td><b>FACILITY NAME</b></td>
+	</tr>
+	<{foreach from=$examLogNotHaveOrder item=log key=facilityName name=row}>
+	<tr>
+		<td><{$smarty.foreach.row.index+1}></td>
+		<td><{$facilityName}></td>
+	</tr>
+	<{/foreach}>
+</table>
+<{/if}>
+*}>

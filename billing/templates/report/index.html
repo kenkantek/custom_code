@@ -1,0 +1,168 @@
+<{include file="header.html"}>
+
+<body>
+
+<div class="blueline">
+
+</div>
+
+<div id="header">
+
+	<div class="wrap">
+		<{include file="block_top.html"}>
+	</div>
+
+</div>
+
+<div class="wrap">
+
+	<div id="content_pages">
+
+		<div id="content_left">
+
+			<div id="submenu" style="margin:0">
+
+			<img src="<{$smarty.const.WEBSITE_URL}>images/mainmenu_content.png" alt="Main Menu" />
+			<ul>
+				<li><a href="#" class="list">&nbsp;&nbsp;List</a></li>
+             <br /><br />
+             <div id="divSearch">
+                <form id="frmSearch">
+                <table width="100%" border="0" cellspacing="1" cellpadding="1">
+                 <tr>
+                   <td colspan="2"><strong>Search</strong></td>
+                 </tr>
+				 <tr>
+                   <td>Month</td>
+                   <td>
+                       <input name="monthSearch" id="monthSearch" value="<{$currentMonth}>" maxlength="2" />
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Year</td>
+                   <td>
+                       <input name="yearSearch" id="yearSearch" value="<{$currentYear}>" maxlength="4" />
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Region</td>
+                   <td>
+                       <{$regionCombo}>
+                   </td>
+                 </tr>
+				 <tr>
+                   <td>Status</td>
+                   <td>
+                       <select id="statusSearch" name="statusSearch" class="comboSmall">
+						   <option value="-1">All</option>
+						   <option value="paid">Paid</option>
+						   <option value="unpaid">Unpaid</option>
+					   </select>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td colspan="2" align="right">
+                       <input type="reset" name="clear" id="clear" value="Clear" />
+                       <input type="submit" name="button" id="button" value="Search" />
+                   </td>
+                 </tr>
+                </table>
+                </form>
+             </div>
+			</ul>
+
+			</div>
+
+
+		</div>
+
+		<div id="content_area">
+
+			<h3><{$navTitle}> -> <span id="navTitle">List</span></h3>
+			
+			<!-- for display message -->
+			<div id="message">
+				<div id="messageDetail"></div>
+			</div>
+
+			<br/>
+			
+			<div id="content_wrapper"></div>
+
+		</div>
+
+		<div class="clr"></div>
+
+	</div>
+
+</div>
+<{include file="footer.html"}>
+<{literal}>
+<script src="js/jquery.form.js" type="text/javascript"></script>
+<script language="javascript">
+	
+	var path = '<{/literal}><{$processPath}><{literal}>';
+
+	$(document).ready(function(){
+		//call get list
+		list();
+
+		//handle form seach
+		$('#frmSearch').submit(function(){
+			list();
+			return false;
+		})
+
+		//Page List
+		$('a.list').click(function(){
+			list();
+			return false;
+		});
+
+	})
+	
+	function list(){
+
+			changeNavTitle('Monthly Billing Summary Report');
+			$('#divSearch').show();
+			
+			if($('#monthSearch').val() < 1 || $('#monthSearch').val() > 12)
+			{
+				displayMessageBox('Please enter correct value for Month');
+				return false;
+			}
+			
+			if($('#yearSearch').val() < 1982)
+			{
+				displayMessageBox('Please enter correct value for Year');
+				return false;
+			}
+
+			var form = $('#frmSearch').serializeArray();
+
+			callAjax('GET',
+					'content_wrapper',
+					path + 'get_list.php',
+					form,
+					'listOk',
+					'listError');
+	}
+	function listOk() {
+		
+	}
+
+	function doOk()
+	{
+		list();
+	}
+
+	function listError(){
+		displayError('Error when getting data. Press Ctrl + F5 to reload');
+	}
+
+	
+
+</script>
+<{/literal}>
+</body>
+</html>

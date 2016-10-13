@@ -1,0 +1,21 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<h3>Add New Note</h3>
+	<table width="100%">
+		<tr>
+			<td>Date</td>
+			<td><input name="date" id="date" readonly="readonly" /></td>
+		</tr>
+		<tr>
+			<td>Notes</td>
+			<td><textarea name="notes" id="notes"></textarea></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="addRecord" value="Save">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" id="billing_id" name="billing_id" value="<{$billing_id}>" />
+</form>

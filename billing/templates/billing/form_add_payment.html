@@ -1,0 +1,30 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<h3>Add New Payment</h3>
+	<table width="100%">
+
+		<tr>
+			<td>Date</td>
+			<td><input name="date" id="date" readonly="readonly" /></td>
+		</tr>
+		<tr>
+			<td>Amount</td>
+			<td><input name="amount" id="amount" /></td>
+		</tr>
+		<tr>
+			<td>Check Number</td>
+			<td><input name="check" id="check" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Notes</td>
+			<td><textarea name="notes" id="notes"></textarea></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="addRecord" value="Save">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" id="billing_id" name="billing_id" value="<{$billing_id}>" />
+</form>

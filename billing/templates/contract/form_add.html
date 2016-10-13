@@ -1,0 +1,99 @@
+<form id="frmAdd" method="post" name="frmAdd" action="">
+	<table width="100%">
+		<tr>
+			<td>Contract Number </td>
+			<td><input name="number" id="number" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Contract Name</td>
+			<td><input name="name" id="name"  class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Email</td>
+			<td><input name="email" id="email" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Email 2</td>
+			<td><input name="email2" id="email2" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Email 3</td>
+			<td><input name="email3" id="email3" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Start Date</td>
+			<td><input readonly="readonly" name="start_date" id="start_date" /></td>
+		</tr>
+		<tr>
+			<td>Region</td>
+			<td><input name="region" id="region" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Title for Bill</td>
+			<td><input name="title" id="title" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Address for Bill</td>
+			<td><textarea name="address" id="address"></textarea></td>
+		</tr>
+		<tr>
+			<td>Phone for Bill</td>
+			<td><input name="phone" id="phone" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Tax-ID for Bill</td>
+			<td><input name="tax" id="tax" class="textboxInForm" /></td>
+		</tr>
+		<tr>
+			<td>Assigned User</td>
+			<td>
+				<{$userCombo}>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<table width="100%">
+					<tr>
+						<td align="center">Facilities Available:</td>
+						<td></td>
+						<td align="center">Facilities Assigned</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<select id="source" name="source[]" multiple="true" class="listInForm">
+								<{if $avaiFacilities}>
+									<{foreach from=$avaiFacilities item=row}>
+										<option value="<{$row.id}>"><{$row.name}></option>
+									<{/foreach}>
+								<{/if}>
+							</select>
+						</td>
+						<td align="center">
+							<input type="button" id="btAdd" value=">>" /><br/><br/>
+							<input type="button" id="btRemove" value="<<" />
+						</td>
+						<td align="center">
+							<select id="desc" name="desc[]" multiple="true" class="listInForm">
+							</select>
+						</td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+		<tr>
+			<td>File format used for email</td>
+			<td><{$fileFormatCombo}></td>
+		</tr>
+		<tr>
+			<td></td><td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="button" id="addRecord" value="Submit">
+				<input type="reset" id="reset" value="Reset">
+			</td>
+		</tr>
+	</table>
+</form>
+

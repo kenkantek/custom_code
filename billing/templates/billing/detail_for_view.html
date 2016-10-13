@@ -1,0 +1,70 @@
+<{include file="header.html"}>
+<body>
+	<div class="wrap" style="padding-bottom: 50px;">
+		<{if $contentExtra}>
+		<blockquote><{$contentExtra}></blockquote>
+		<{/if}>
+		<{$content}>
+		<br><br>
+		Email : <{$contract.email}> <{$contract.email2}> <{$contract.email3}><br/>
+		File format : <{$fileFormat}>
+		<br/><br/>
+		<table>
+			<tr>
+				<td><input type="button" value="Close" id="doClose" /></td>
+				<td>
+					<form action="" method="POST" id="formVerify1">
+						<input type="hidden" value="1" name="resend" />
+						<input type="submit" value="Resend this Bill" name="submit" />
+					</form>
+				</td>
+				<td>
+					<form action="" method="POST" id="formVerify3">
+						<input type="hidden" value="1" name="download" />
+						<input type="hidden" value="pdf" name="file_format" />
+						<input type="submit" value="Download this Bill as PDF" name="submit" />
+					</form>
+				</td>
+				<td>
+					<form action="" method="POST" id="formVerify4">
+						<input type="hidden" value="1" name="download" />
+						<input type="hidden" value="doc" name="file_format" />
+						<input type="submit" value="Download this Bill as DOC" name="submit" />
+					</form>
+				</td>
+				<td>
+					<form action="" method="POST" id="formVerify5">
+						<input type="hidden" value="1" name="download" />
+						<input type="hidden" value="xls" name="file_format" />
+						<input type="submit" value="Download this Bill as XLS" name="submit" />
+					</form>
+				</td>
+				<{if $unverifyRight}>
+				<td>
+					<form action="" method="POST" id="formVerify20">
+						<input type="hidden" value="1" name="unverify" />
+						<input type="submit" value="Unverify this Bill" name="submit" />
+					</form>
+				</td>
+				<{/if}>
+			</tr>
+		</table>
+	</div>
+
+<{include file="footer.html"}>
+</body>
+</html>
+<{literal}>
+<script language="javascript">
+
+	$(document).ready(function(){
+		$('#doClose').click(function(){
+			window.close();
+		});
+
+		$('#formVerify20').submit(function(){
+			return window.confirm("Are you sure want to Unverify this bill ?");
+		})
+	})
+</script>
+<{/literal}>
